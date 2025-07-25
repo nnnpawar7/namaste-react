@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Zip Puzzle Game</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: #f0f0f0;
+    }
+    canvas {
+      background: white;
+      border: 2px solid #000;
+      touch-action: none;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="gameCanvas" width="400" height="400"></canvas>
+
+  <script>
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    const gridSize = 4;
+    const cellSize = canvas.width / gridSize;
+    const levels = [
+      [
+        [1, 0, 0, 0],
+        [0, 2, 0, 0],
+        [0, 0, 3, 0],
+        [0, 0, 0, 4],
+      ],
+      [
+        [1, 0, 0, 2],
+        [0, 0, 3, 0],
+        [0, 4, 0, 0],
+        [5, 0, 0, 6],
+      ]
+    ];
+
+    let currentLevel = 0;
+    let grid = [];
+    let visited = [];
+    let path = [];
+    let isDragging = false;
+
+    function loadLevel(levelIndex) {
+      grid = levels[levelIndex];
+      visited = Array(gridSize).fill().map(() => Array(gridSize).fill(false));
+      path = [];
+      drawGrid();
+    }
+
+    function drawGrid() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.lineWidth = 4;
+      ctx.strokeStyle = 'black';
+      ctx.fillStyle = 'black';
+
+      for (let r = 0; r < gridSize; r++) {
+        for (let c = 0; c < gridSize; c++) {
+          const x = c * cellSize;
+          const y = r * cellSize;
+          ctx.strokeRect(x, y, cellSize, cellSize);
+
+          const val = grid[r][c];
+          if (val > 0) {
+            ctx.font = '20px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(val, x + cellSize / 2, y + cellSize / 2);
+          }
+        }
+      }
+
+      // draw path lines
+      ctx.strokeStyle = 'blue';
+      ctx.lineWidth = 8;
+      ctx.beginPath();
+      for (let i = 0; i < path.length - 1; i++) {
+        const [r1, c1] = path[i];
+        const [r2, c2] = path[i + 1];
+        const x1 = c1 * cellSize + cellSize / 2;
+        const y1 = r1 * cellSize + cellSize / 2;
+        const x2 = c2 * cellSize + cellSize / 2;
+        const y2 = r2 * cellSize + cellSize / 2;
+        ctx.moveTo(x1, y1);
+        ctx.lineTo(x2, y2);
+      }
+      ctx.stroke();
+    }
+
+    function getCellFromCoords(x, y) {
+      const col = Math.floor(x / cellSize);
+      const row = Math.floor(y / cellSize);
+      if (row >= 0 && row < gridSize && col >= 0 && col < gridSize) {
+        return [row, col];
+      }
+      return null;
+    }
+
+    function areAdjacent(cell1, cell2) {
+      const [r1, c1] = cell1;
+      const [r2, c2] = cell2;
+      return (Math.abs(r1 - r2) + Math.abs(c1 - c2)) === 1;
+    }
+
+    canvas.addEventListener('mousedown', (e) => {
+      const rect = canvas.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const cell = getCellFromCoords(x, y);
+      if (!cell) return;
+
+      const [r, c] = cell;
+      if (grid[r][c] === 1) {
+        isDragging = true;
+        path = [[r, c]];
+        visited[r][c] = true;
+        drawGrid();
+      }
+    });
+
+    canvas.addEventListener('mousemove', (e) => {
+      if (!isDragging) return;
+
+      const rect = canvas.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const cell = getCellFromCoords(x, y);
+      if (!cell) return;
+
+      const [r, c] = cell;
+      const last = path[path.length - 1];
+      if (!visited[r][c] && areAdjacent([r, c], last)) {
+        visited[r][c] = true;
+        path.push([r, c]);
+        drawGrid();
+
+        const currentVal = grid[r][c];
+        const lastVal = grid[last[0]][last[1]];
+        if (currentVal === lastVal + 1) {
+          // Check if we reached the last number in level
+          const maxVal = Math.max(...grid.flat());
+          if (currentVal === maxVal) {
+            setTimeout(() => {
+              alert('Level Complete!');
+              currentLevel++;
+              if (currentLevel < levels.length) {
+                loadLevel(currentLevel);
+              } else {
+                alert('Game Completed!');
+              }
+            }, 200);
+          }
+        }
+      }
+    });
+
+    canvas.addEventListener('mouseup', () => {
+      isDragging = false;
+    });
+
+    loadLevel(currentLevel);
+  </script>
+</body>
+</html>
