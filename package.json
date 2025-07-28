@@ -1,0 +1,22 @@
+{
+  "name": "namaste_react",
+  "version": "1.0.0",
+  "main": "app.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nnnpawar7/namaste-react.git"
+  },
+  "author": "Nilesh Pawar",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nnnpawar7/namaste-react/issues"
+  },
+  "homepage": "https://github.com/nnnpawar7/namaste-react#readme",
+  "description": "",
+  "devDependencies": {
+    "parcel": "2.15.4"
+  }
+}
