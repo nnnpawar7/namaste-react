@@ -1,7 +1,72 @@
-.test1 {
-  color: red;
+.header {
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid black;
+}
+.body {
+  display: flex;
+  flex-direction: column;
+}
+.logo {
+  width: 100px;
+  height: 100px;
+}
+.nav-items > ul {
+  display: flex;
+  font-size: larger;
+  list-style-type: none;
+}
+.res-thumb-image {
+  width: 100%;
+  height: 45%;
+}
+.nav-items > ul >li{
+  padding: 10px;
+  margin: 10px;
 }
 
-.test0 {
-  color: green;
+.seach-container {
+  float: right;
+  flex-direction: row-reverse;
+  border: 1px solid red;
+}
+
+.res-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.res-card {
+  margin: 10px;
+  /* height: auto; */
+  height: 580px;
+  border-radius: 10px;
+  width: 292px;
+  padding: 10px;
+  background-color: silver;
+  border:0.5px solid transparent;
+}
+
+.res-card:hover{
+  border:0.5px solid gray;
+  cursor: pointer;
+}
+
+.shimmer-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.shimmer-card {
+  height: 580px;
+  margin: 10px;
+  border-radius: 10px;
+  width: 292px;
+  padding: 10px;
+  border:0.5px solid transparent;
+  background-color: silver;
+}
+
+.login-btn {
+  width: 80px;
 }
