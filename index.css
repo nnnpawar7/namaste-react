@@ -2,6 +2,7 @@
   display: flex;
   justify-content: space-between;
   border: 1px solid black;
+  margin-bottom: 10px;
 }
 .body {
   display: flex;
@@ -69,4 +70,8 @@
 
 .login-btn {
   width: 80px;
+}
+
+.user-card {
+ border: 1px solid red; 
 }

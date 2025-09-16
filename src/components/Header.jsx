@@ -1,3 +1,4 @@
+import {Link} from "react-router-dom"
 import { Fragment, useState } from "react";
 // import { LOGO_URL } from "../utils/contants";
 const logo = new URL('../../logo.svg', import.meta.url);
@@ -13,9 +14,11 @@ export const Header = ()=>{
             </Fragment>
             <div className="nav-items">
                 <ul>
-                    <li>Home</li>
-                    <li>About Us</li>
-                    <li>Contact Us</li>
+                    <li><Link to="/">Home</Link></li>
+                    <li><Link to="/about">About Us</Link></li>
+                    <li><Link to="/contact">Contact Us</Link></li>
+                    <li><Link to="/user">User</Link></li>
+                    <li><Link to="/grocery">Grocery</Link></li>
                     <li>Cart</li>
                     <li><button className="login-btn" onClick={()=>{loginBtnText=="Login"? setLoginBtnText("Logout"): setLoginBtnText("Login")}}>{loginBtnText}</button></li>
                 </ul>

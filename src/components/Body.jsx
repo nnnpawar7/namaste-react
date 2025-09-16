@@ -1,3 +1,4 @@
+import {Link} from "react-router-dom";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { RestaurantCard } from "./RestaurantCard";
@@ -11,7 +12,6 @@ export const Body = ()=>{
     const displayTopRatedRestaurants =async()=>{
         if(searchText.length){
             const aa = restaurantOriginalList.filter(res=>{
-                console.log('1-------', res.info.name)
                 return res.info.name.toLowerCase().includes(searchText.toLowerCase())
             })
             setRestaurantList(aa)
@@ -24,9 +24,10 @@ export const Body = ()=>{
 
     const fetchRestaurantData=async()=>{
         const data = await axios.get("https://www.swiggy.com/dapi/restaurants/list/v5?lat=18.5246091&lng=73.8786239&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING")
+        
         const restaurantData = data?.data?.data?.cards?.[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants;
-        setRestaurantList(restaurantData||[])
-        setRestaurantOriginalList(restaurantData||[])
+        setRestaurantList(restaurantData || [])
+        setRestaurantOriginalList(restaurantData || [])
     }
     useEffect(()=>{
         fetchRestaurantData();
@@ -40,7 +41,10 @@ export const Body = ()=>{
         <div className="body">
             <Search displayTopRatedRestaurants={displayTopRatedRestaurants} setSearchText={setSearchText} searchText={searchText}/>
             <div className="res-container">
-                {(restaurantList).map((res, index)=><RestaurantCard resData={res.info} key={index}/>)}
+                {(restaurantList).map((res, index)=>{
+                    return <Link key={res.info.id} to={`/restaurant-menu/${res.info.id}`}><RestaurantCard resData={res.info} key={index}/></Link>
+                })
+                }
             </div>
         </div>
     )
